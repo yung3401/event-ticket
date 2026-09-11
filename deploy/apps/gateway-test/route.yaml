@@ -1,0 +1,28 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: gateway-test
+  namespace: event-ticket
+spec:
+  hosts:
+    - hanseo.asuscomm.com
+  gateways:
+    - istio-ingress/event-ticket
+  http:
+    - name: grafana
+      match:
+        - uri:
+            exact: /grafana
+        - uri:
+            prefix: /grafana/
+      route:
+        - destination:
+            host: monitoring-grafana.monitoring.svc.cluster.local
+            port:
+              number: 80
+    - name: test-page
+      route:
+        - destination:
+            host: gateway-test.event-ticket.svc.cluster.local
+            port:
+              number: 80
